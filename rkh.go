@@ -90,12 +90,12 @@ func main() {
 
 	canRemove := *forcePtr
 
-	if !canRemove {
-		fmt.Println(len(matchedHosts), "host(s) were matched:")
-		for _, host := range matchedHosts {
-			fmt.Println(host)
-		}
+	fmt.Println(len(matchedHosts), "host(s) were matched:")
+	for _, host := range matchedHosts {
+		fmt.Println(host)
+	}
 
+	if !canRemove {
 		fmt.Println("\nConfirm the removal of these hosts? [Y/n]")
 		reader := bufio.NewReader(os.Stdin)
 		answer, _ := reader.ReadString('\n')
