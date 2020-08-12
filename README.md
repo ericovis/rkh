@@ -1,5 +1,5 @@
-# Remove Known Hosts (rkh) CLI
-Command line tool for removing entries of your ~/.ssh/known_hosts file
+# rkh
+A command-line tool for removing entries of your ~/.ssh/known_hosts file
 
 
 ## Setup
@@ -29,7 +29,6 @@ Parameters:
         Suppress confirmation dialog.
 
 ```
-
 
 ## Contibuting
 
