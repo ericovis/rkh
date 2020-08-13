@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-var filePath = os.Getenv("HOME") + "/.ssh/known_hosts"
+var FilePath = os.Getenv("HOME") + "/.ssh/known_hosts"
 
 func check(e error) {
 	if e != nil {
@@ -19,8 +19,8 @@ func check(e error) {
 	}
 }
 
-func getKnowHosts() *[]string {
-	dat, err := ioutil.ReadFile(filePath)
+func getKnownHosts() *[]string {
+	dat, err := ioutil.ReadFile(FilePath)
 	check(err)
 
 	lines := strings.Split(string(dat), "\n")
@@ -32,15 +32,22 @@ func getKnowHosts() *[]string {
 func removeHosts(matchedHosts *[]string, knownHosts *[]string) {
 	var cleaned []string
 	fmt.Println("Removing hosts...")
-	for _, mHost := range *matchedHosts {
-		for _, kHost := range *knownHosts {
-			if !strings.HasPrefix(kHost, mHost) {
-				cleaned = append(cleaned, kHost)
+	for _, kHost := range *knownHosts {
+		var match bool = false
+		
+		for _, mHost := range *matchedHosts {
+			if strings.HasPrefix(kHost, mHost) {
+				match = true
+				break		
 			}
+		}
+
+		if !match {
+			cleaned = append(cleaned, kHost)
 		}
 	}
 	contents := strings.Join(cleaned, "\n")
-	err := ioutil.WriteFile(filePath, []byte(contents), 0644)
+	err := ioutil.WriteFile(FilePath, []byte(contents), 0644)
 	check(err)	
 	fmt.Println("Done!")
 }
@@ -80,8 +87,10 @@ func main() {
 		os.Exit(128)
 	}
 
-	knownHosts := getKnowHosts()
+	knownHosts := getKnownHosts()
 	matchedHosts := getMatchedHosts(knownHosts, &args)
+
+	fmt.Println(len(*knownHosts), "known host(s) were found.")
 
 	if len(matchedHosts) == 0 {
 		fmt.Println("No hosts were matched.")
